@@ -1,0 +1,55 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Kala_Shareera"
+run/main_scene="uid://dgdhj838j141j"
+config/features=PackedStringArray("4.5", "Mobile")
+boot_splash/bg_color=Color(0.05, 0.03, 0.1, 1)
+boot_splash/image="res://assets/ui/splash_screen.png"
+config/icon="res://icon.png"
+
+[autoload]
+
+SceneManager="*res://scripts/core/scene_manager.gd"
+ReticleManager="*res://scripts/ui/reticle_manager.gd"
+UIManager="*res://scripts/ui/ui_manager.gd"
+AudioManager="*res://scripts/ui/audio_manager.gd"
+XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"
+XRToolsRumbleManager="*res://addons/godot-xr-tools/rumble/rumble_manager.gd"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
+
+[physics]
+
+common/physics_fps=30
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+anti_aliasing/quality/msaa_3d=1
+
+[xr]
+
+openxr/foveation_level=3
+openxr/foveation_dynamic=true
+shaders/enabled=true
+openxr/extensions/meta/color_space/starting_color_space=3

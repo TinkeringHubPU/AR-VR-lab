@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcho3iyrp1vax"]
+
+[ext_resource type="Script" uid="uid://uni9dnmw18mdu" path="res://scripts/player/universal_rig.gd" id="1_uni3b"]
+
+[node name="UniversalRig" type="Node3D"]
+script = ExtResource("1_uni3b")

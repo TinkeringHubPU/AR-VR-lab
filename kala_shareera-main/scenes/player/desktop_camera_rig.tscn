@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dek11sk1j182n"]
+
+[ext_resource type="Script" uid="uid://de9dnmw18mdnd" path="res://scripts/player/desktop_camera_rig.gd" id="1_d103b"]
+
+[node name="DesktopCameraRig" type="Node3D"]
+script = ExtResource("1_d103b")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+current = true
+fov = 75.0

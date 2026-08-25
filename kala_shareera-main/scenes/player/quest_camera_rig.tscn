@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://0qakg6i5sfp4"]
+
+[ext_resource type="Script" uid="uid://cgj06y3ab6vma" path="res://scripts/player/quest_camera_rig.gd" id="1_ba0i0"]
+[ext_resource type="Script" uid="uid://dj4g6jrfsk7x2" path="res://scripts/interaction/gaze_controller.gd" id="1_ucd8u"]
+
+[node name="QuestCameraRig" type="XROrigin3D"]
+script = ExtResource("1_ba0i0")
+
+[node name="XRCamera3D" type="XRCamera3D" parent="." node_paths=PackedStringArray("raycast")]
+script = ExtResource("1_ucd8u")
+raycast = NodePath("RayCast3D")
+
+[node name="RayCast3D" type="RayCast3D" parent="XRCamera3D"]
+target_position = Vector3(0, 0, -10)
+collision_mask = 2

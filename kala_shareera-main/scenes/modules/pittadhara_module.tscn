@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" uid="uid://medyipixcimc" path="res://scripts/media/video_manager.gd" id="1_vm"]
+[ext_resource type="PackedScene" uid="uid://bcho3iyrp1vax" path="res://scenes/player/universal_rig.tscn" id="2_ur"]
+[ext_resource type="PackedScene" uid="uid://bsayoh0opteq8" path="res://scenes/environments/void_space.tscn" id="3_vs"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pitta"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pitta"]
+size = Vector2(2.4, 1.35)
+
+[node name="PittadharaModule" type="Node3D"]
+
+[node name="VoidSpace" parent="." instance=ExtResource("3_vs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00041103363, -0.033013463, -1.7024219)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8989623, -0.43802598, 0, 0.43802598, 0.8989623, -0.022623539, 0.022168279, -0.027599573)
+spot_range = 4.551284
+spot_angle = 48.800915
+
+[node name="UniversalRig" parent="." instance=ExtResource("2_ur")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." node_paths=PackedStringArray("video_screen_mesh", "video_player")]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 1.2151304, -2.5)
+material_override = SubResource("StandardMaterial3D_pitta")
+mesh = SubResource("PlaneMesh_pitta")
+script = ExtResource("1_vm")
+video_screen_mesh = NodePath(".")
+video_player = NodePath("VideoStreamPlayer")
+auto_play_video_name = "kala6"
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="MeshInstance3D"]
+offset_right = 40.0
+offset_bottom = 40.0

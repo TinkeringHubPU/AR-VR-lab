@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kala Shareera — VR Learning Application</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #0a0a1a;
+    --bg-card: #111128;
+    --bg-card-alt: #161638;
+    --accent: #6c63ff;
+    --accent-glow: #8b83ff;
+    --accent-secondary: #00d4aa;
+    --text-primary: #eeeef5;
+    --text-secondary: #a0a0c0;
+    --text-muted: #6a6a8a;
+    --border: #2a2a4a;
+    --gradient-1: linear-gradient(135deg, #6c63ff, #00d4aa);
+    --gradient-2: linear-gradient(135deg, #ff6b8a, #6c63ff);
+    --gradient-3: linear-gradient(135deg, #00d4aa, #00b4d8);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  /* ── Slide Container ── */
+  .deck {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateY(30px);
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    overflow-y: auto;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  /* ── Typography ── */
+  .slide-number {
+    position: absolute;
+    top: 28px;
+    left: 40px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+
+  h2 {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    letter-spacing: -0.5px;
+  }
+
+  h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--accent-glow);
+  }
+
+  .subtitle {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    max-width: 650px;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .gradient-text {
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Cards & Layouts ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 1050px;
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+
+  .card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  /* ── Tags / Badges ── */
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .badge-accent {
+    background: rgba(108, 99, 255, 0.15);
+    color: var(--accent-glow);
+    border: 1px solid rgba(108, 99, 255, 0.3);
+  }
+
+  .badge-green {
+    background: rgba(0, 212, 170, 0.12);
+    color: var(--accent-secondary);
+    border: 1px solid rgba(0, 212, 170, 0.3);
+  }
+
+  /* ── Table ── */
+  .clean-table {
+    width: 100%;
+    max-width: 900px;
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+
+  .clean-table th {
+    text-align: left;
+    padding: 12px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-glow);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .clean-table td {
+    padding: 12px 18px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(42, 42, 74, 0.5);
+  }
+
+  .clean-table tr:hover td {
+    color: var(--text-primary);
+  }
+
+  /* ── Lists ── */
+  .feature-list {
+    list-style: none;
+    max-width: 750px;
+    width: 100%;
+  }
+
+  .feature-list li {
+    padding: 10px 0;
+    font-size: 16px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+  }
+
+  .feature-list li::before {
+    content: '→';
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .check-list li::before {
+    content: '✓';
+    color: var(--accent-secondary);
+  }
+
+  /* ── Flow diagram ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .flow-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 20px;
+    padding: 0 8px;
+    font-weight: 700;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--gradient-1);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* ── Navigation ── */
+  .nav {
+    position: fixed;
+    bottom: 30px;
+    right: 40px;
+    display: flex;
+    gap: 10px;
+    z-index: 50;
+  }
+
+  .nav button {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .nav button:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .nav button:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .slide-counter {
+    position: fixed;
+    bottom: 36px;
+    left: 40px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+    z-index: 50;
+  }
+
+  /* ── Title Slide Specific ── */
+  .title-slide {
+    text-align: center;
+  }
+
+  .title-slide h1 {
+    font-size: 64px;
+    margin-bottom: 8px;
+  }
+
+  .title-slide .divider {
+    width: 80px;
+    height: 3px;
+    background: var(--gradient-1);
+    border-radius: 2px;
+    margin: 24px auto;
+  }
+
+  .title-meta {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 40px;
+  }
+
+  /* ── Architecture box ── */
+  .arch-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 800px;
+    width: 100%;
+    font-family: 'Inter', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+
+  .arch-box .highlight {
+    color: var(--accent-glow);
+    font-weight: 600;
+  }
+
+  .arch-box .green {
+    color: var(--accent-secondary);
+  }
+
+  /* ── Conclusion ── */
+  .conclusion-quote {
+    font-size: 24px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-secondary);
+    max-width: 700px;
+    text-align: center;
+    line-height: 1.6;
+    margin-top: 24px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .slide { justify-content: flex-start; padding: 80px 20px 60px 20px; }
+    h1 { font-size: 36px; }
+    .title-slide h1 { font-size: 42px; }
+    h2 { font-size: 28px; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; gap: 8px; }
+    .flow-arrow { transform: rotate(90deg); padding: 5px 0; }
+  }
+
+  /* ── Animation keyframes ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .card,
+  .slide.active .flow-item,
+  .slide.active h2,
+  .slide.active .subtitle,
+  .slide.active .feature-list li {
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .slide.active .card:nth-child(2) { animation-delay: 0.08s; }
+  .slide.active .card:nth-child(3) { animation-delay: 0.16s; }
+  .slide.active .card:nth-child(4) { animation-delay: 0.24s; }
+  .slide.active .card:nth-child(5) { animation-delay: 0.32s; }
+  .slide.active .card:nth-child(6) { animation-delay: 0.4s; }
+  .slide.active .card:nth-child(7) { animation-delay: 0.48s; }
+  .slide.active .card:nth-child(8) { animation-delay: 0.56s; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ══════════════════════ SLIDE 1 — TITLE ══════════════════════ -->
+  <div class="slide title-slide active" data-slide="0">
+    <span class="badge badge-accent">VR Educational Application</span>
+    <h1><span class="gradient-text">Kala Shareera</span></h1>
+    <p class="subtitle">An Immersive Virtual Reality Experience for Ayurvedic Anatomy Education</p>
+    <div class="divider"></div>
+    <p class="title-meta">Walkthrough &amp; Methodology Presentation</p>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 2 — PROBLEM ══════════════════════ -->
+  <div class="slide" data-slide="1">
+    <span class="slide-number">02 / Problem Statement</span>
+    <h2>Why This Project?</h2>
+    <div class="grid-2">
+      <div class="card">
+        <span class="card-icon">📚</span>
+        <h3>Textbook Limitation</h3>
+        <p>Traditional Ayurvedic anatomy education relies on 2D diagrams and static illustrations that fail to convey spatial relationships.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🧠</span>
+        <h3>Passive Learning</h3>
+        <p>Lecture-based methods do not engage students in active, experiential learning — resulting in poor retention of complex anatomical concepts.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔍</span>
+        <h3>Accessibility Gap</h3>
+        <p>There is no self-paced, interactive tool that bridges ancient Ayurvedic textual descriptions with modern visual understanding.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">💡</span>
+        <h3>The Opportunity</h3>
+        <p>VR technology can transform abstract concepts into tangible, immersive spatial experiences — making learning intuitive and memorable.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 3 — OBJECTIVES ══════════════════════ -->
+  <div class="slide" data-slide="2">
+    <span class="slide-number">03 / Objectives</span>
+    <h2>Project Objectives</h2>
+    <ul class="feature-list">
+      <li>Develop a VR application that immerses the user in an educational 3D environment</li>
+      <li>Present Kala Shareera content through pre-baked animated sequences rendered directly within the 3D level</li>
+      <li>Implement hands-free, gaze-based navigation for complete accessibility</li>
+      <li>Support multiple deployment targets — Mobile VR, Standalone Headsets (Meta Quest), and Desktop</li>
+      <li>Create a modular architecture extensible to additional Ayurvedic topics</li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 4 — METHODOLOGY ══════════════════════ -->
+  <div class="slide" data-slide="3">
+    <span class="slide-number">04 / Methodology</span>
+    <h2>Design &amp; Methodology</h2>
+    <div class="grid-3">
+      <div class="card">
+        <span class="card-icon">👁️</span>
+        <h3>Gaze-Only Interaction</h3>
+        <p>Users interact by looking at objects. A radial progress indicator fills on sustained gaze, triggering actions after 2 seconds. No controllers needed.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🎬</span>
+        <h3>Baked Animated Sequences</h3>
+        <p>Each module contains an animated sequence pre-baked into the 3D level. Only content visible within the camera viewport is rendered in real-time.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌐</span>
+        <h3>Cross-Platform Rig</h3>
+        <p>A universal player rig detects the host platform at runtime — gyroscope on mobile, native XR on headsets, mouse on desktop — no manual switching.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 5 — TECH STACK ══════════════════════ -->
+  <div class="slide" data-slide="4">
+    <span class="slide-number">05 / Technology Stack</span>
+    <h2>Technology Stack</h2>
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Technology</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>3D Rendering</td><td>Custom real-time 3D rendering pipeline</td></tr>
+        <tr><td>VR Rendering</td><td>Stereo camera rig with barrel distortion shader</td></tr>
+        <tr><td>Head Tracking</td><td>Gyroscope sensor (Mobile) / Native XR (Headset)</td></tr>
+        <tr><td>Interaction</td><td>Raycast-based gaze detection with dwell timer</td></tr>
+        <tr><td>Shader Effects</td><td>Custom GLSL shaders for lens distortion &amp; glow</td></tr>
+        <tr><td>Scripting</td><td>Event-driven custom scripting language</td></tr>
+        <tr><td>Platforms</td><td>Android, Meta Quest 3/3S, Desktop</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 6 — APP FLOW ══════════════════════ -->
+  <div class="slide" data-slide="5">
+    <span class="slide-number">06 / Application Flow</span>
+    <h2>Application Flow</h2>
+    <div class="flow">
+      <div class="flow-item">App Launch</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item">Splash Screen</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item">Main Menu</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item">Module Selection</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item">Learning Module</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-item">Return to Menu</div>
+    </div>
+    <div style="margin-top: 40px;">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Scene Management</h3>
+          <p>An autoloaded Scene Manager handles all transitions with smooth fade-in/fade-out effects and loading screens.</p>
+        </div>
+        <div class="card">
+          <h3>State Tracking</h3>
+          <p>The application tracks the current and previous scenes, allowing seamless back-navigation from any module.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 7 — ARCHITECTURE ══════════════════════ -->
+  <div class="slide" data-slide="6">
+    <span class="slide-number">07 / System Architecture</span>
+    <h2>System Architecture</h2>
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Responsibility</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Core Layer</td><td>Scene management, application state, transitions</td></tr>
+        <tr><td>Player Layer</td><td>Camera rig, head tracking, platform detection</td></tr>
+        <tr><td>Interaction Layer</td><td>Gaze raycasting, dwell timer, interactive objects</td></tr>
+        <tr><td>UI Layer</td><td>Reticle, menus, tutorial overlay, loading screens</td></tr>
+        <tr><td>Content Layer</td><td>Educational modules with baked-in animated sequences</td></tr>
+        <tr><td>Environment Layer</td><td>3D environments, lighting, skybox, ambient effects</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 8 — MODULES ══════════════════════ -->
+  <div class="slide" data-slide="7">
+    <span class="slide-number">08 / Learning Modules</span>
+    <h2>Learning Modules</h2>
+    <div class="grid-4">
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">📖</span>
+        <h3>Introduction</h3>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">💪</span>
+        <h3>Mamsadhara Kala</h3>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">🩸</span>
+        <h3>Raktadhara Kala</h3>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">🧈</span>
+        <h3>Medodhara Kala</h3>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">🔥</span>
+        <h3>Pittadhara Kala</h3>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">💧</span>
+        <h3>Sleshmadhara Kala</h3>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">♻️</span>
+        <h3>Purishadhara Kala</h3>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-icon">🧬</span>
+        <h3>Shukradhara Kala</h3>
+      </div>
+    </div>
+    <p style="margin-top:20px; color: var(--text-muted); font-size:14px; text-align:center; max-width:700px;">
+      Each module places the user inside a dedicated 3D environment. An animated sequence is baked into the level — the educational content is rendered as part of the scene itself, visible only through what the camera captures.
+    </p>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 9 — KEY FEATURES ══════════════════════ -->
+  <div class="slide" data-slide="8">
+    <span class="slide-number">09 / Key Features</span>
+    <h2>Key Features</h2>
+    <div class="grid-3">
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <h3>Reticle System</h3>
+        <p>Idle → Hover → Dwell states. A radial progress ring fills before triggering interaction. Custom glow shader for visibility.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌌</span>
+        <h3>Immersive Environment</h3>
+        <p>Dark space-like void with subtle ambient lighting. Floating UI elements with sine-wave animations and dynamic glow on hover.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📱</span>
+        <h3>Universal Player Rig</h3>
+        <p>Auto-detects platform — mobile gyroscope, Meta Quest native XR, or desktop mouse input. Zero manual configuration.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🎓</span>
+        <h3>Tutorial Overlay</h3>
+        <p>Visual onboarding on every launch. Teaches gaze-based interaction controls. Dismissible via gaze on close button.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔄</span>
+        <h3>Smooth Transitions</h3>
+        <p>Fade-in/fade-out scene transitions with loading screens. No jarring cuts between environments.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔊</span>
+        <h3>Audio System</h3>
+        <p>Ambient background audio, UI interaction sounds (hover, select), and per-module audio management for immersion.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 10 — VR RENDERING ══════════════════════ -->
+  <div class="slide" data-slide="9">
+    <span class="slide-number">10 / VR Rendering Pipeline</span>
+    <h2>Stereo VR Rendering</h2>
+    <div class="arch-box">
+      <div style="text-align:center; line-height:2.2;">
+        <span class="highlight">Gyroscope / XR Tracking Input</span><br>
+        ↓<br>
+        <span class="green">Head Tracker</span> (Smoothing + Calibration + Drift Correction)<br>
+        ↓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+        <span class="highlight">Left Eye Viewport</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">Right Eye Viewport</span><br>
+        (1024 × 1024 px)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1024 × 1024 px)<br>
+        ↓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+        <span class="green">Barrel Distortion Shader</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="green">Barrel Distortion Shader</span><br>
+        ↓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+        ─────────────────────<br>
+        <span class="highlight">Final Side-by-Side Output</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 11 — PERFORMANCE ══════════════════════ -->
+  <div class="slide" data-slide="10">
+    <span class="slide-number">11 / Performance</span>
+    <h2>Performance Targets</h2>
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Frame Rate</td><td>60 FPS (30 FPS stable minimum)</td></tr>
+        <tr><td>Per-Eye Resolution</td><td>1024 × 1024 pixels</td></tr>
+        <tr><td>Max Mesh Complexity</td><td>500 vertices per mesh</td></tr>
+        <tr><td>Texture Resolution</td><td>1024 × 1024 max</td></tr>
+        <tr><td>Application Size</td><td>&lt; 200 MB</td></tr>
+        <tr><td>Runtime Memory</td><td>&lt; 512 MB</td></tr>
+        <tr><td>Lighting</td><td>Fully baked (no dynamic lights)</td></tr>
+        <tr><td>Texture Compression</td><td>VRAM Compressed (ETC2 / ASTC)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 12 — PLATFORM SUPPORT ══════════════════════ -->
+  <div class="slide" data-slide="11">
+    <span class="slide-number">12 / Platform Support</span>
+    <h2>Cross-Platform Support</h2>
+    <div class="grid-3">
+      <div class="card" style="text-align:center; opacity: 0.7;">
+        <span class="card-icon">📱</span>
+        <h3>Mobile VR <span class="badge" style="background: rgba(255, 60, 60, 0.2); color: #ff6b8a; border: 1px solid rgba(255,60,60,0.3); font-size:9px; vertical-align: middle; margin-left:5px; margin-bottom:0;">Not Available</span></h3>
+        <p><strong>Input:</strong> Gyroscope + Gaze</p>
+        <p><strong>Mode:</strong> Stereo side-by-side rendering</p>
+      </div>
+      <div class="card" style="text-align:center; border-color: var(--accent);">
+        <span class="card-icon">🥽</span>
+        <h3>Meta Quest 3 / 3S</h3>
+        <p><strong>Input:</strong> Native XR tracking</p>
+        <p><strong>Mode:</strong> Native OpenXR immersive rendering</p>
+      </div>
+      <div class="card" style="text-align:center; opacity: 0.7;">
+        <span class="card-icon">🖥️</span>
+        <h3>Desktop <span class="badge" style="background: rgba(255, 60, 60, 0.2); color: #ff6b8a; border: 1px solid rgba(255,60,60,0.3); font-size:9px; vertical-align: middle; margin-left:5px; margin-bottom:0;">Not Available</span></h3>
+        <p><strong>Input:</strong> Mouse + Keyboard</p>
+        <p><strong>Mode:</strong> Flat-screen 3D rendering</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 13 — DEV PHASES ══════════════════════ -->
+  <div class="slide" data-slide="12">
+    <span class="slide-number">13 / Development Phases</span>
+    <h2>Development Phases</h2>
+    <div class="grid-2" style="max-width: 900px;">
+      <div class="card">
+        <span class="badge badge-accent">Phase 1</span>
+        <h3>Core Systems</h3>
+        <p>Project setup, camera rig implementation, head tracking, stereo rendering verification.</p>
+      </div>
+      <div class="card">
+        <span class="badge badge-accent">Phase 2</span>
+        <h3>Interaction</h3>
+        <p>Gaze raycasting, dwell timer system, reticle visual states, interactive 3D objects.</p>
+      </div>
+      <div class="card">
+        <span class="badge badge-accent">Phase 3</span>
+        <h3>Content</h3>
+        <p>Main menu, all 8 learning modules, baked animated sequences for each Kala.</p>
+      </div>
+      <div class="card">
+        <span class="badge badge-accent">Phase 4</span>
+        <h3>Polish & Deploy</h3>
+        <p>UI animations, tutorial, audio, loading screens, performance optimization, APK build.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 14 — TESTING ══════════════════════ -->
+  <div class="slide" data-slide="13">
+    <span class="slide-number">14 / Testing & QA</span>
+    <h2>Testing &amp; Quality Assurance</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3>✅ Functional</h3>
+        <ul class="feature-list check-list" style="font-size:13px;">
+          <li>Head tracking smooth &amp; responsive</li>
+          <li>Stereo rendering correctly aligned</li>
+          <li>Gaze detection accurate</li>
+          <li>Dwell timer triggers correctly</li>
+          <li>All modules load &amp; return</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>✅ VR Comfort</h3>
+        <ul class="feature-list check-list" style="font-size:13px;">
+          <li>No motion sickness triggers</li>
+          <li>Text readable at VR distance</li>
+          <li>UI at comfortable depth</li>
+          <li>Reticle always visible</li>
+          <li>Pitch limits enforced</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>✅ Performance</h3>
+        <ul class="feature-list check-list" style="font-size:13px;">
+          <li>Maintains target FPS</li>
+          <li>No drops during animation</li>
+          <li>Acceptable battery drain</li>
+          <li>No overheating</li>
+          <li>Stable memory usage</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 15 — FUTURE SCOPE ══════════════════════ -->
+  <div class="slide" data-slide="14">
+    <span class="slide-number">15 / Future Scope</span>
+    <h2>Future Scope</h2>
+    <ul class="feature-list">
+      <li>Expand to additional Ayurvedic anatomy modules — Dhatu, Dosha, Srotas</li>
+      <li>Integrate voice-over narration for each learning module</li>
+      <li>Add quiz and assessment mode after each module for self-evaluation</li>
+      <li>Support additional VR headsets — Apple Vision Pro, HTC Vive</li>
+      <li>Multiplayer classroom mode for guided group instruction</li>
+      <li>Localization for multiple languages — Hindi, Sanskrit, English</li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════ SLIDE 16 — CONCLUSION ══════════════════════ -->
+  <div class="slide title-slide" data-slide="15">
+    <span class="badge badge-green">Conclusion</span>
+    <h1><span class="gradient-text">Thank You</span></h1>
+    <div class="divider"></div>
+    <p class="conclusion-quote">
+      "Kala Shareera demonstrates that immersive VR can transform abstract Ayurvedic concepts into tangible, spatial learning experiences — bridging ancient wisdom with modern technology."
+    </p>
+    <p class="title-meta" style="margin-top: 48px;">Kala Shareera — Immersive VR for Ayurvedic Anatomy</p>
+    <p class="title-meta" style="margin-top: 10px; font-weight: 600; color: var(--accent-secondary);">Developed by Thinkering Hub</p>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="slide-counter" id="slideCounter">1 / 16</div>
+<div class="nav">
+  <button id="prevBtn" onclick="navigate(-1)" disabled>←</button>
+  <button id="nextBtn" onclick="navigate(1)">→</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const progress = document.getElementById('progressBar');
+  const counter = document.getElementById('slideCounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function showSlide(index) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[index].classList.add('active');
+    progress.style.width = ((index + 1) / total * 100) + '%';
+    counter.textContent = (index + 1) + ' / ' + total;
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === total - 1;
+  }
+
+  function navigate(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) {
+      current = next;
+      showSlide(current);
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+    if (e.key === 'Home') { current = 0; showSlide(0); }
+    if (e.key === 'End') { current = total - 1; showSlide(current); }
+  });
+
+  // Touch support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+  });
+
+  showSlide(0);
+</script>
+
+</body>
+</html>

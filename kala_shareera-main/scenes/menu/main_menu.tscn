@@ -1,0 +1,167 @@
+[gd_scene load_steps=21 format=3 uid="uid://dgdhj838j141j"]
+
+[ext_resource type="PackedScene" uid="uid://bcho3iyrp1vax" path="res://scenes/player/universal_rig.tscn" id="2_247la"]
+[ext_resource type="PackedScene" uid="uid://cwwtxs0u5gktn" path="res://scenes/ui/button.tscn" id="3_hj162"]
+[ext_resource type="Texture2D" uid="uid://cwc77qe7o41v4" path="res://assets/icons/intro.png" id="4_d4hu8"]
+[ext_resource type="Texture2D" uid="uid://bxrievwioskf4" path="res://assets/icons/kala1.png" id="5_p1nwe"]
+[ext_resource type="Texture2D" uid="uid://bimoayyogpr2r" path="res://assets/icons/kala2.png" id="6_prbor"]
+[ext_resource type="Texture2D" uid="uid://dids57vmdfurv" path="res://assets/icons/kala3.png" id="7_27h4x"]
+[ext_resource type="Texture2D" uid="uid://0p3klaohcm5p" path="res://assets/icons/kala4.png" id="8_gdhp0"]
+[ext_resource type="PackedScene" uid="uid://c3fp0yjgkj7r1" path="res://assets/3d models/gurukul/gurukul.glb" id="8_qgo02"]
+[ext_resource type="Texture2D" uid="uid://dtmhr35b414ec" path="res://assets/icons/kala5.png" id="9_pstia"]
+[ext_resource type="PackedScene" uid="uid://jl2v0or2wu6m" path="res://assets/3d models/tree/tree2.glb" id="9_vovv2"]
+[ext_resource type="Texture2D" uid="uid://c41agxjsysw1" path="res://assets/icons/kala6.png" id="10_41tvm"]
+[ext_resource type="Texture2D" uid="uid://c7cx43uftxxp5" path="res://assets/icons/kala7.png" id="11_vxdmp"]
+[ext_resource type="Texture2D" uid="uid://cb0vafoki8u06" path="res://assets/ui/scroll.png" id="12_scroll"]
+[ext_resource type="Script" uid="uid://c2vruetojx2vi" path="res://scripts/menu/main_menu_controller.gd" id="13_ctrl"]
+[ext_resource type="Script" uid="uid://dg61g0cocvh31" path="res://scripts/ui/tutorial_overlay.gd" id="14_tuts"]
+[ext_resource type="Texture2D" uid="uid://bkg5j56m48ecr" path="res://assets/icons/about.svg" id="15_about"]
+[ext_resource type="Texture2D" uid="uid://cxx22vgwp1lvb" path="res://assets/icons/exit.svg" id="16_exit"]
+
+[sub_resource type="Environment" id="Environment_qgo02"]
+background_color = Color(1, 0.3811667, 0.20999998, 1)
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scroll"]
+render_priority = -1
+transparency = 1
+albedo_texture = ExtResource("12_scroll")
+emission_enabled = true
+emission = Color(0.15, 0.15, 0.15, 1)
+emission_energy_multiplier = 0.5
+emission_texture = ExtResource("12_scroll")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vovv2"]
+material = SubResource("StandardMaterial3D_scroll")
+
+[node name="MainMenu" type="Node3D"]
+script = ExtResource("13_ctrl")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qgo02")
+
+[node name="UniversalRig" parent="." instance=ExtResource("2_247la")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02526164, 4.210757)
+
+[node name="gurukul" parent="." instance=ExtResource("8_qgo02")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.886673, -1.4506483, -15.064524)
+metadata/_edit_group_ = true
+
+[node name="scroll" type="Node3D" parent="."]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 1.406657, 0.7560401)
+
+[node name="Intro" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 1, -0.995, 0.7265724, -0.5)
+action_id = "intro"
+label_text = "Introduction"
+hover_color = Color(1, 0.7166667, 0, 1)
+main_icon = ExtResource("4_d4hu8")
+
+[node name="kala1" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 1, 0.085, 0.7265724, -0.5)
+action_id = "mamsadhara"
+label_text = "Mamsadhara"
+hover_color = Color(1, 0.7166667, 0, 1)
+main_icon = ExtResource("5_p1nwe")
+
+[node name="kala2" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 1, 1.1763892, 0.7260939, -0.5)
+action_id = "raktadhara"
+label_text = "Raktadhara"
+hover_color = Color(1, 0.7166667, 0, 1)
+main_icon = ExtResource("6_prbor")
+
+[node name="kala3" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 1, 1.176, -0.36742762, -0.5)
+action_id = "medodhara"
+label_text = "Medodhara"
+hover_color = Color(1, 0.7166667, 0, 1)
+main_icon = ExtResource("7_27h4x")
+
+[node name="kala4" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 1, 1.176, -1.4614276, -0.5)
+action_id = "sleshmadhara"
+label_text = "Sleshmadhara"
+hover_color = Color(1, 0.7166667, 0, 1)
+main_icon = ExtResource("8_gdhp0")
+
+[node name="kala5" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 1, 0.085, -1.4614276, -0.5)
+action_id = "purishadhara"
+label_text = "Purishadhara"
+hover_color = Color(1, 0.7166667, 0, 1)
+main_icon = ExtResource("9_pstia")
+
+[node name="kala6" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 1, -0.9951813, -1.4612669, -0.5)
+action_id = "pittadhara"
+label_text = "Pittadhara"
+hover_color = Color(1, 0.7166667, 0, 1)
+main_icon = ExtResource("10_41tvm")
+
+[node name="kala7" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 1, -0.995, -0.36742762, -0.5)
+action_id = "shukradhara"
+label_text = "Shukradhara"
+hover_color = Color(1, 0.7166667, 0, 1)
+main_icon = ExtResource("11_vxdmp")
+
+[node name="bg" type="MeshInstance3D" parent="scroll"]
+transform = Transform3D(4.2194843, 0, 0, 0, -4.3711392e-08, -2.5068955, 0, 1.0000001, -1.0957989e-07, 0.039167576, -0.3251071, -0.72294986)
+mesh = SubResource("PlaneMesh_vovv2")
+
+[node name="ExitButton" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.8, -0.995, -2.35, -0.5)
+action_id = "exit"
+label_text = "Exit App"
+hover_color = Color(1, 0.25, 0.2, 1)
+main_icon = ExtResource("16_exit")
+
+[node name="AboutButton" parent="scroll" instance=ExtResource("3_hj162")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.8, 1.142, -2.35, -0.538)
+action_id = "about"
+label_text = "About"
+hover_color = Color(0.3, 0.6, 1, 1)
+main_icon = ExtResource("15_about")
+
+[node name="tree2" parent="." instance=ExtResource("9_vovv2")]
+transform = Transform3D(1.4506285, 0, 1.3768358, 0, 2, 0, -1.3768358, 0, 1.4506285, 0.6661966, -1.4036144, -12.731003)
+metadata/_edit_group_ = true
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40670824, 2.2859507, -8.034497)
+light_color = Color(1, 0.74, 0.74, 1)
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_volumetric_fog_energy = 16.0
+light_size = 1.0
+light_specular = 0.0
+omni_range = 15.865325
+metadata/_edit_group_ = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(-0.9939629, 0, -0.10971687, 0, 1, 0, 0.10971687, 0, -0.9939629, 9.782981, 0, -28.743998)
+light_color = Color(1.416, 0.798, 0.356, 1)
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_volumetric_fog_energy = 16.0
+light_size = 1.0
+light_specular = 0.0
+spot_range = 52.211975
+spot_angle = 11.117346
+metadata/_edit_group_ = true
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="."]
+transform = Transform3D(-0.993961, 0, 0.10973427, 0, 1, 0, -0.10973427, 0, -0.993961, -7.3163414, 0, -28.743998)
+light_color = Color(1.416, 0.798, 0.356, 1)
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_volumetric_fog_energy = 16.0
+light_size = 1.0
+light_specular = 0.0
+spot_range = 52.211975
+spot_angle = 12.268861
+metadata/_edit_group_ = true
+
+[node name="TutorialOverlay" type="Node" parent="."]
+script = ExtResource("14_tuts")

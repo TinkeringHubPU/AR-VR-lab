@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwwtxs0u5gktn"]
+
+[ext_resource type="Script" uid="uid://c8t4a1j5ldumx" path="res://scripts/interaction/menu_button.gd" id="1_di1ux"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_di1ux"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_di1ux"]
+material = SubResource("StandardMaterial3D_di1ux")
+size = Vector2(1.2, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3xo2w"]
+size = Vector3(0.6201019, 0.6296387, 0.123535156)
+
+[node name="Button" type="StaticBody3D"]
+script = ExtResource("1_di1ux")
+hover_color = Color(0.4, 0.7, 1.0, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("PlaneMesh_di1ux")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, -0.0037457356, 0.00498046, -0.03732334)
+shape = SubResource("BoxShape3D_3xo2w")
