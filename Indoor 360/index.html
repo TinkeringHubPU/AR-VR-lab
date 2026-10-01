@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Indoor Campus Navigation</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="nav-logo">
+                <img src="assets/parul university.png" alt="University Logo" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%231F4E79\'/%3E%3Ctext x=\'50\' y=\'50\' fill=\'white\' font-family=\'sans-serif\' font-size=\'40\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EU%3C/text%3E%3C/svg%3E'">
+                <span class="logo-text">Campus Navigator</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="#">Home</a>
+                <a href="#buildings">Explore Campus</a>
+                <a href="#search-section">Search</a>
+                <a href="#">About</a>
+                <a href="#">Help</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1>Indoor Campus Navigation System</h1>
+                <p>Welcome to the official university campus navigation portal. Explore buildings, locate classrooms, and navigate through our digital campus.</p>
+                <a href="viewer.html" class="btn btn-primary">Start Campus Tour</a>
+            </div>
+            <div class="hero-image">
+                <div class="map-preview">
+                    <!-- We use the existing map image or a placeholder -->
+                    <img src="assets/ground_floor_map.jpg" alt="Campus Map Preview" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 600 400\'%3E%3Crect width=\'600\' height=\'400\' fill=\'%23F5F5F5\'/%3E%3Ctext x=\'300\' y=\'200\' fill=\'%23888\' font-family=\'sans-serif\' font-size=\'20\' text-anchor=\'middle\'%3ECampus Map Preview%3C/text%3E%3C/svg%3E'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section" id="search-section">
+        <div class="container search-container">
+            <h2>Find Your Destination</h2>
+            <div class="search-box-wrapper">
+                <input type="text" id="searchInput" placeholder="Search for Laboratory, Classroom, Office, Faculty Room, Library...">
+                <button class="btn btn-secondary">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Building List -->
+    <section class="buildings-section" id="buildings">
+        <div class="container">
+            <h2>Campus Locations</h2>
+            <div class="buildings-grid" id="buildingsGrid">
+                <!-- Populated by JS -->
+            </div>
+            <div id="noResults" class="no-results" style="display: none;">
+                No locations found matching your search.
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-info">
+                <h3>Parul University</h3>
+                <p>Vadodara, Gujarat</p>
+                <p>Contact: info@university.edu | +91 12345 67890</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Help</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Parul University Indoor Campus Navigation System. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
